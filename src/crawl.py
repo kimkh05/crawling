@@ -8,6 +8,7 @@ from selenium.webdriver.common.by import By
 import csv
 import time
 from collections import Counter as cn
+import numpy as np
 
 url = "https://www.wanted.co.kr/wdlist/518?country=kr&job_sort=company.response_rate_order&years=-1&locations=all"
 options = webdriver.ChromeOptions()
@@ -39,26 +40,25 @@ res = driver.page_source
 
 soup = (bs(res, 'html.parser').select(".job-card-position"))
 
-title: str = []
+title = []
 for data in soup:
   title.append(data.get_text())
 
 df = pd.DataFrame(soup)
-# print(len(title))
-# print(title)
 df.head()
 df.to_csv("/content/drive/MyDrive/wanted.csv", mode="a")
+
+d = pd.read_csv('/content/drive/MyDrive/wanted.csv')
 
 job = {"프론트엔드": 0,
        "백엔드": 0,
        "안드로이드": 0,
        "IOS": 0,
-       "Dev-Ops": 0,
        "OS": 0,
        "임베디드": 0,
        "풀스택": 0,
        "AI": 0,
-       "기타" : 0}
+       }
 
 value_title = cn(title)
 
@@ -69,4 +69,21 @@ for element in value_title:
       job[find_data] = job[find_data] + 1
       break;
 
-print(job)
+job_title: str = ["Frontend", "Backend", "Android", "IOS", "OS", "Embedded", "Full-stack", "AI"]
+c = []
+for k, v in job.items():
+  c.append(v)
+
+cv = np.array(c)
+x = np.arange(len(c))
+colors = ['#ff9999', '#ffc000', '#8fd9b6', '#d395d0', "#A1B5DC", "#B6B6B6", "#3EAF0E", "#79DAE0"]
+wedgeprops = {'width': 0.7, 'edgecolor': 'w', 'linewidth': 5}
+plt.pie(cv, labels=job_title, autopct='%.1f%%', counterclock=False, startangle=260, colors=colors, wedgeprops=wedgeprops)
+
+plt.title("Developers")
+plt.show()
+
+plt.bar(x, c)
+plt.xticks(x, job_title, rotation=45)
+plt.title("Developers")
+plt.show()
