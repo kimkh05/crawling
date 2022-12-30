@@ -1,3 +1,6 @@
+import matplotlib.pylab as plt
+import numpy as np
+
 job_title: str = ["Frontend", "Backend", "Android", "IOS", "OS", "Embedded", "Full-stack", "AI"]
 c = []
 for k, v in job.items():
