@@ -1,11 +1,15 @@
 import reactLogo from "./assets/react.svg";
 import InitCsv from "./components/init";
 import StyleProvider from "./style";
+import { QueryClient, QueryClientProvider } from "react-query";
 
-function App() {
+const App = () => {
+  const queryClient: QueryClient = new QueryClient();
   return (
     <StyleProvider>
-      <span>Test</span>
+      <QueryClientProvider client={queryClient}>
+        <span>Test</span>
+      </QueryClientProvider>
     </StyleProvider>
   );
 }
